@@ -1,0 +1,8 @@
+{
+  "name": "Mustofa Fit System",
+  "short_name": "Mustofa Fit",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#1f8f62"
+}
