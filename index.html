@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f8fa">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mustofa Fit">
+<title>Mustofa Fit System</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--text:#17191c;--muted:#747a83;--accent:#1f8f62;--soft:#e8f5ef;--line:#eceef1;--danger:#e56b5d;--shadow:0 8px 24px rgba(20,30,25,.07)}
+*{box-sizing:border-box}body{margin:0;background:#dfe3e7;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--text)}
+.app{width:min(100%,430px);min-height:100vh;margin:auto;background:var(--bg);position:relative;padding-bottom:92px}
+header{padding:calc(env(safe-area-inset-top) + 22px) 20px 14px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:27px;margin:0 0 4px;letter-spacing:-.7px}h2{font-size:21px;margin:0 0 12px;letter-spacing:-.3px}h3{font-size:16px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px}
+main{padding:0 16px}.screen{display:none}.screen.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:17px;margin:10px 0;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(145deg,#1f8f62,#2ca978);color:#fff;border:0;padding:21px}.hero .sub{color:#dff4e9}.hero h2{font-size:25px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:14px;border-radius:16px;background:#fafafa;border:1px solid var(--line)}.metric b{font-size:23px}.metric span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.progress{height:9px;background:#e7e9eb;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--accent);border-radius:20px;width:0}
+.btn{border:0;border-radius:14px;padding:12px 15px;font-weight:700;font-size:14px;background:var(--accent);color:white;cursor:pointer}.btn.secondary{background:var(--soft);color:var(--accent)}.btn.ghost{background:#f1f2f4;color:#333}
+.check{width:30px;height:30px;border-radius:50%;border:2px solid #cbd0d4;background:#fff;cursor:pointer;font-size:17px}.check.done{background:var(--accent);border-color:var(--accent);color:white}
+.exercise{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.exercise:last-child{border-bottom:0}.num{width:34px;height:34px;border-radius:11px;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);height:82px;padding:8px 7px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:5}
+.navbtn{border:0;background:none;color:#858b92;font-size:10px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px}.navbtn .ico{font-size:21px}.navbtn.active{color:var(--accent)}
+.streak{font-size:46px;font-weight:900;letter-spacing:-2px}.fire{font-size:40px}.small{font-size:12px;color:var(--muted)}ul{padding-left:20px;margin:10px 0}li{margin:7px 0}.pill{padding:6px 10px;background:var(--soft);color:var(--accent);border-radius:99px;font-size:11px;font-weight:800}
+input{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;font-size:16px;margin:6px 0 10px;background:#fff}
+.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:#17191c;color:#fff;padding:11px 15px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:10}.toast.show{opacity:1}
+
+.onboard{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;align-items:flex-start;justify-content:center}
+.onboard.hidden{display:none}.onboard-inner{width:min(100%,430px);min-height:100%;padding:calc(env(safe-area-inset-top) + 34px) 22px 30px;display:flex;flex-direction:column}
+.ob-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.ob-logo{font-weight:900;font-size:18px;color:var(--accent)}
+.ob-step{font-size:12px;font-weight:800;color:var(--muted)}
+.ob-title{font-size:32px;line-height:1.05;letter-spacing:-1px;margin:0 0 10px}.ob-sub{font-size:15px;line-height:1.5;color:var(--muted);margin:0 0 26px}
+.ob-content{flex:1}.ob-label{font-size:13px;font-weight:800;display:block;margin:0 0 8px}.ob-input{font-size:25px;font-weight:800;text-align:center;padding:17px;border-radius:17px;border:1px solid var(--line);width:100%;background:#fff}
+.choice-grid{display:grid;gap:10px}.choice{border:1.5px solid var(--line);background:#fff;border-radius:17px;padding:16px;text-align:left;cursor:pointer}.choice b{display:block;font-size:16px;margin-bottom:4px}.choice span{font-size:12px;color:var(--muted)}.choice.selected{border-color:var(--accent);background:var(--soft)}
+.ob-footer{padding-top:18px}.ob-next{width:100%;font-size:16px;padding:16px;border-radius:17px}
+.ob-dots{display:flex;gap:5px;justify-content:center;margin-bottom:12px}.ob-dots i{width:7px;height:7px;border-radius:50%;background:#d7dbde}.ob-dots i.on{width:22px;border-radius:8px;background:var(--accent)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}.cal-day{text-align:center;font-size:10px;color:var(--muted);font-weight:800}.cal-cell{height:42px;border-radius:13px;background:#f6f7f7;display:grid;place-items:center;font-size:13px;font-weight:800}.cal-cell.done{background:var(--soft);color:var(--accent)}.cal-cell.today{outline:2px solid var(--accent);outline-offset:1px}.cal-cell.future{opacity:.45}
+</style>
+</head>
+<body>
+
+<div class="onboard" id="onboard">
+ <div class="onboard-inner">
+  <div class="ob-top"><div class="ob-logo">● Mustofa Fit</div><div class="ob-step" id="obStep">1 / 4</div></div>
+  <div class="ob-dots"><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="ob-content">
+   <h1 class="ob-title" id="obTitle">Let's build your starting point.</h1>
+   <p class="ob-sub" id="obSub">We'll use a few simple numbers to personalize your fitness plan.</p>
+   <div id="obBody"></div>
+  </div>
+  <div class="ob-footer"><button class="btn ob-next" id="obNext" onclick="obNext()">Continue</button></div>
+ </div>
+</div>
+<div class="app">
+<header>
+  <div><h1>Mustofa Fit</h1><div class="sub" id="date"></div></div>
+  <div class="pill">WEEK <span id="week">1</span></div>
+</header>
+
+<main>
+<section id="today" class="screen active">
+  <div class="card hero">
+    <div class="sub">TODAY'S MISSION</div><h2 id="mission">Build your base 💪</h2>
+    <div class="sub">30 minutes. Small actions, repeated.</div>
+  </div>
+  <div class="grid">
+    <div class="metric"><b id="weightToday">85</b><span>kg current</span></div>
+    <div class="metric"><b id="waistToday">—</b><span>waist cm</span></div>
+    <div class="metric"><b id="water">0/8</b><span>water cups</span></div>
+    <div class="metric"><b id="tasksDone">0/4</b><span>daily habits</span></div>
+  </div>
+  <div class="card">
+    <div class="row"><div><h3>Daily habits</h3><div class="small">Aim for 4/4 — perfection not required.</div></div><span id="habitPct">0%</span></div>
+    <div style="margin-top:13px" id="habits"></div>
+  </div>
+  <div class="card"><div class="row"><div><h3>Today's workout</h3><div class="small">30 min • Full Body A</div></div><button class="btn" onclick="show('workout')">Start</button></div></div>
+</section>
+
+<section id="workout" class="screen">
+  <h2>Workout</h2>
+  <div class="card hero"><div class="sub">MONDAY • STRENGTH A</div><h2>Full Body Foundation</h2><div class="sub">3 rounds • Rest 45 sec</div></div>
+  <div class="card" id="exerciseList"></div>
+  <div class="card"><div class="row"><div><h3>Session progress</h3><div class="small" id="exCount">0/5 exercises</div></div><button class="btn secondary" onclick="completeWorkout()">Finish workout</button></div><div class="progress" style="margin-top:13px"><i id="exBar"></i></div></div>
+  <div class="card"><h3>Jogging days</h3><div class="small">Tuesday + Saturday</div><p>5 min walk → 1 min jog / 2 min walk × 6 → 5 min walk.</p></div>
+</section>
+
+<section id="food" class="screen">
+  <h2>Food</h2>
+  <div class="card hero"><div class="sub">YOUR SIMPLE RULE</div><h2>Protein + plants + controlled rice</h2><div class="sub">No crash diet. Keep food you enjoy.</div></div>
+  <div class="card"><h3>Lunch 🍚</h3><ul><li>1 fist rice</li><li>2 palms chicken / lean meat</li><li>2 handfuls vegetables</li><li>1–2 eggs</li></ul></div>
+  <div class="card"><h3>Dinner 🍜</h3><ul><li>Rice + chicken + vegetables, or</li><li>Soup pan mee + extra vegetables + less noodles</li></ul></div>
+  <div class="card"><h3>Weekly treats</h3><div class="row"><span>Ice cream</span><b>1×</b></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><div class="row"><span>Fast food</span><b>1× meal</b></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><div class="row"><span>Sweet drinks</span><b>1×</b></div></div>
+</section>
+
+<section id="progress" class="screen">
+  <h2>Progress</h2>
+  <div class="card hero"><div class="sub">LONG-TERM TARGET</div><h2>85 → 63 kg</h2><div class="sub">Focus first on a smaller waist and stronger body.</div><div class="progress" style="margin-top:16px;background:rgba(255,255,255,.3)"><i id="goalBar" style="background:#fff"></i></div></div>
+  <div class="grid">
+    <div class="metric"><b id="currentWeight">85</b><span>current kg</span></div><div class="metric"><b>63</b><span>target kg</span></div>
+  </div>
+  <div class="card"><h3>Weekly check-in</h3><div class="small">Enter your Sunday morning measurement.</div><input id="weightInput" type="number" step=".1" placeholder="Weight (kg)"><input id="waistInput" type="number" step=".1" placeholder="Waist (cm)"><button class="btn" onclick="saveCheckin()">Save check-in</button></div>
+  <div class="card"><h3>Coach rule</h3><p>Don't judge progress from one day. Look at the trend across 3–4 weeks.</p></div>
+</section>
+
+<section id="streaks" class="screen">
+  <h2>Streaks</h2>
+  <div class="card" style="text-align:center"><div class="fire">🔥</div><div class="streak" id="streak">0</div><div class="small">DAY STREAK</div></div>
+  <div class="card"><h3>This week</h3><div class="progress"><i id="streakBar"></i></div><div class="row" style="margin-top:10px"><span class="small">Consistency beats intensity.</span><b id="streakText">0/7 days</b></div></div>
+  <div class="card"><div class="row"><div><h3>7-day streak calendar</h3><div class="small">Complete all daily habits to mark a day.</div></div><span class="pill" id="calendarScore">0/7</span></div><div class="calendar" id="calendar"></div></div>
+  <div class="card"><h3>Coach message</h3><p id="coachMsg">Your only job today: show up for 30 minutes.</p></div>
+</section>
+</main>
+
+<nav>
+<button class="navbtn active" data-screen="today"><span class="ico">🏠</span>Today</button>
+<button class="navbtn" data-screen="workout"><span class="ico">💪</span>Workout</button>
+<button class="navbtn" data-screen="food"><span class="ico">🍚</span>Food</button>
+<button class="navbtn" data-screen="progress"><span class="ico">📈</span>Progress</button>
+<button class="navbtn" data-screen="streaks"><span class="ico">🔥</span>Streaks</button>
+</nav>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const KEY='mustofaFitV1';
+let state=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ weight:85, waist:null, goal:'look fit', fitness:'beginner', water:0,
+ habits:[false,false,false,false], exercises:[false,false,false,false,false],
+ streak:0, activeDays:0, completedDates:[]
+};
+const habitNames=['30-min workout','2 protein meals','Vegetables ×2','No sweet drink'];
+const exercises=[['Bodyweight Squat','12 reps'],['Incline Push-up','8–10 reps'],['Glute Bridge','15 reps'],['Bird Dog','10 / side'],['March in Place','60 sec']];
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+
+let obStep=1;
+let obData={weight:state.weight||85,waist:state.waist||'',goal:state.goal||'look fit',fitness:state.fitness||'beginner'};
+function obRender(){
+ const titles=[
+  ["What's your current weight?","This gives us a baseline. You can update it anytime."],
+  ["What's your waist measurement?","Measure around your waist at the same point each time. If you don't know it, you can skip."],
+  ["What are you working toward?","We'll keep the plan realistic and focused."],
+  ["What's your fitness level?","Pick the level that feels closest today."]
+ ];
+ document.getElementById('obStep').textContent=obStep+" / 4";
+ document.getElementById('obTitle').textContent=titles[obStep-1][0];
+ document.getElementById('obSub').textContent=titles[obStep-1][1];
+ document.querySelectorAll('.ob-dots i').forEach((x,i)=>x.classList.toggle('on',i===obStep-1));
+ const body=document.getElementById('obBody');
+ if(obStep===1) body.innerHTML='<label class="ob-label">WEIGHT (KG)</label><input class="ob-input" id="obWeight" type="number" step=".1" value="'+obData.weight+'" inputmode="decimal">';
+ if(obStep===2) body.innerHTML='<label class="ob-label">WAIST (CM)</label><input class="ob-input" id="obWaist" type="number" step=".1" value="'+obData.waist+'" placeholder="Optional" inputmode="decimal">';
+ if(obStep===3) body.innerHTML='<div class="choice-grid">'+
+  choice('look fit','Look fit & athletic','Smaller waist + stronger body')+
+  choice('belly','Reduce belly fat','Make waist the main focus')+
+  choice('muscle','Build muscle','Get stronger and more muscular')+
+  choice('stamina','Improve stamina','Walk/jog and feel fitter')+'</div>';
+ if(obStep===4) body.innerHTML='<div class="choice-grid">'+
+  choice('beginner','Beginner','New to structured exercise')+
+  choice('basic','Basic','I can exercise regularly')+
+  choice('active','Active','I already train or run often')+'</div>';
+ document.getElementById('obNext').textContent=obStep===4?'Start my plan':'Continue';
+}
+function choice(v,t,s){return '<button class="choice '+(obData[obStep===3?'goal':'fitness']===v?'selected':'')+'" onclick="obChoose(\''+v+'\')"><b>'+t+'</b><span>'+s+'</span></button>'}
+function obChoose(v){if(obStep===3)obData.goal=v;else obData.fitness=v;obRender()}
+function obNext(){
+ if(obStep===1){let v=parseFloat(document.getElementById('obWeight').value);if(v>0)obData.weight=v}
+ if(obStep===2){let v=parseFloat(document.getElementById('obWaist').value);if(v>0)obData.waist=v}
+ if(obStep<4){obStep++;obRender();return}
+ state.weight=obData.weight;state.waist=obData.waist||null;state.goal=obData.goal;state.fitness=obData.fitness;
+ localStorage.setItem(KEY,JSON.stringify(state));document.getElementById('onboard').classList.add('hidden');render();toast('Welcome to Mustofa Fit 💪');
+}
+function localDateKey(d=new Date()){return d.toLocaleDateString('en-CA')}
+function renderCalendar(){
+ const box=document.getElementById('calendar');if(!box)return;
+ const now=new Date(), day=now.getDay(), mondayOffset=(day+6)%7;
+ const monday=new Date(now);monday.setDate(now.getDate()-mondayOffset);
+ let doneCount=0, out='<div class="cal-day">M</div><div class="cal-day">T</div><div class="cal-day">W</div><div class="cal-day">T</div><div class="cal-day">F</div><div class="cal-day">S</div><div class="cal-day">S</div>';
+ for(let i=0;i<7;i++){let d=new Date(monday);d.setDate(monday.getDate()+i);let k=localDateKey(d),done=state.completedDates.includes(k),today=k===localDateKey(now),future=d>now;if(done)doneCount++;
+  out+='<div class="cal-cell '+(done?'done ':'')+(today?'today ':'')+(future?'future':'')+'">'+(done?'✓':d.getDate())+'</div>';
+ }
+ box.innerHTML=out;document.getElementById('calendarScore').textContent=doneCount+'/7';
+}
+function render(){
+ document.getElementById('date').textContent=new Date().toLocaleDateString('en-MY',{weekday:'long',day:'numeric',month:'short'});
+ document.getElementById('weightToday').textContent=state.weight;
+ document.getElementById('currentWeight').textContent=state.weight;
+ document.getElementById('waistToday').textContent=state.waist??'—';
+ document.getElementById('water').textContent=state.water+'/8';
+ const done=state.habits.filter(Boolean).length;
+ document.getElementById('tasksDone').textContent=done+'/4';
+ document.getElementById('habitPct').textContent=Math.round(done/4*100)+'%';
+ document.getElementById('streak').textContent=state.streak;
+ document.getElementById('streakText').textContent=state.activeDays+'/7 days';
+ document.getElementById('streakBar').style.width=(state.activeDays/7*100)+'%';renderCalendar();
+ document.getElementById('goalBar').style.width=Math.max(0,Math.min(100,(85-state.weight)/(85-63)*100))+'%';
+ document.getElementById('habits').innerHTML=habitNames.map((n,i)=>`<div class="row" style="padding:9px 0"><span>${n}</span><button class="check ${state.habits[i]?'done':''}" onclick="toggleHabit(${i})">${state.habits[i]?'✓':''}</button></div>`).join('');
+ document.getElementById('exerciseList').innerHTML=exercises.map((e,i)=>`<div class="exercise"><div class="num">${i+1}</div><div style="flex:1"><b>${e[0]}</b><div class="small">${e[1]}</div></div><button class="check ${state.exercises[i]?'done':''}" onclick="toggleExercise(${i})">${state.exercises[i]?'✓':''}</button></div>`).join('');
+ const ec=state.exercises.filter(Boolean).length;document.getElementById('exCount').textContent=ec+'/5 exercises';document.getElementById('exBar').style.width=(ec/5*100)+'%';
+}
+function toggleHabit(i){
+ state.habits[i]=!state.habits[i];
+ if(state.habits.every(Boolean)){
+   const k=localDateKey();
+   if(!state.completedDates.includes(k)){state.completedDates.push(k);state.streak++;state.activeDays=Math.min(7,state.activeDays+1);toast('🔥 Great job — day complete!')}
+ }
+ save()
+}
+function toggleExercise(i){state.exercises[i]=!state.exercises[i];save()}
+function completeWorkout(){state.habits[0]=true;toast('Workout completed 💪');save()}
+function saveCheckin(){let w=parseFloat(document.getElementById('weightInput').value),z=parseFloat(document.getElementById('waistInput').value);if(w>0)state.weight=w;if(z>0)state.waist=z;toast('Check-in saved 📈');save()}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.screen===id));window.scrollTo(0,0)}
+document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>show(b.dataset.screen));
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
+render(); if(!localStorage.getItem(KEY)){obRender()} else {document.getElementById('onboard').classList.add('hidden')}
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
